@@ -24,7 +24,7 @@ public class BlogPost {
     @Column(name="reading_time")
     private int readingTime;
     @ManyToOne
-    @JoinColumn(name="blog_post_id")
+    @JoinColumn(name="author_id")
     private Author author;
 
     public BlogPost(String category, String title, String coverUrl, String content, int readingTime, Author author) {

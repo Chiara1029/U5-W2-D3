@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,11 +23,11 @@ public class Author {
     private String surname;
     private String email;
     @Column(name="date_of_birth")
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
     @Column(name="avatar_url")
     private String avatarUrl;
 
-    public Author(String name, String surname, String email, LocalDate dateOfBirth, String avatarUrl) {
+    public Author(String name, String surname, String email, String dateOfBirth, String avatarUrl) {
         this.name = name;
         this.surname = surname;
         this.email = email;
