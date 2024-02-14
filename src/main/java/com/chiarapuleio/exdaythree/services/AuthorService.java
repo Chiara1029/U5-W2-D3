@@ -1,67 +1,48 @@
 package com.chiarapuleio.exdaythree.services;
 
 import com.chiarapuleio.exdaythree.dao.AuthorDAO;
-import com.chiarapuleio.exdaythree.entities.BlogPost;
+import com.chiarapuleio.exdaythree.entities.Author;
+import com.chiarapuleio.exdaythree.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class AuthorService {
     @Autowired
     private AuthorDAO authorDao;
 
+    public List<Author> getAuthors(){
+        return this.authorDao.findAll();
+    }
 
-//    public List<Author> authors = new ArrayList<>();
-//
-//    public List<Author> getAllAuthors() {
-//        return this.authors;
-//    }
-//
-//    public Author saveAuthor(Author newAuthor) {
-//        Random rnd = new Random();
-//        newPost.setId(rnd.nextInt(1, 10));
-//        this.authors.add(newAuthor);
-//        return newAuthor;
-//    }
-//
-//    public Author findById(int id) {
-//        Author found = null;
-//        for (Author author : this.authors) {
-//            if (author.getId() == id) {
-//                found = author;
-//            }
-//        }
-//        return found;
-//    }
-//
-//    public Author findByIdAndUpdate(int id, Author newAuthor) {
-//        Author found = null;
-//        for (Author author : this.authors) {
-//            if (author.getId() == id) {
-//                found = author;
-//                found.setCategory(newPost.getCategory());
-//                found.setTitle(newPost.getTitle());
-//                found.setCover(newPost.getCover());
-//                found.setContent(newPost.getContent());
-//                found.setReadingTime(newPost.getReadingTime());
-//            }
-//        }
-//        if (found == null) throw new RuntimeException();
-//        else return found;
-//    }
-//
-//    public void findByIdAndDelete(int id) {
-//        Iterator<Author> i = this.authors.iterator();
-//        while (i.hasNext()) {
-//            Author current = i.next();
-//            if (current.getId() == id) {
-//                i.remove();
-//            }
-//        }
-//    }
+
+    public Author saveAuthor(Author newAuthor) {
+        if(this.authorDao.existsByEmail(newAuthor.getEmail())){
+            throw new RuntimeException("Author email " + newAuthor.getEmail() + " already exist.");
+        } else {
+            authorDao.save(newAuthor);
+        }
+        return newAuthor;
+    }
+
+    public Author findById(UUID id) {
+        return authorDao.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
+    public Author findByIdAndUpdate(UUID id, Author newAuthor) {
+        Author found = this.findById(id);
+        found.setName(newAuthor.getName());
+        found.setSurname(newAuthor.getSurname());
+        found.setEmail(newAuthor.getEmail());
+        found.setAvatarUrl(newAuthor.getAvatarUrl());
+        found.setDateOfBirth(newAuthor.getDateOfBirth());
+        return authorDao.save(newAuthor);
+    }
+
+    public void findByIdAndDelete(UUID id) {
+        Author found = this.findById(id);
+        authorDao.delete(found);
+    }
 }
