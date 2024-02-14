@@ -1,12 +1,10 @@
 package com.chiarapuleio.exdaythree.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -18,11 +16,14 @@ import java.util.UUID;
 public class Author {
     @Id
     @GeneratedValue
+    @Setter(AccessLevel.NONE)
     private UUID id;
     private String name;
     private String surname;
     private String email;
+    @Column(name="date_of_birth")
     private LocalDate dateOfBirth;
+    @Column(name="avatar_url")
     private String avatarUrl;
 
     public Author(String name, String surname, String email, LocalDate dateOfBirth, String avatarUrl) {
